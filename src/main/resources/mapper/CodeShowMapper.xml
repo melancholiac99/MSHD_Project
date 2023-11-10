@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mshd_project.core.dao.CodeShowMapper">
+    <resultMap id="BaseResultMap" type="com.example.mshd_project.core.entity.CodeShow">
+        <id column="code_id" jdbcType="BIGINT" property="codeId"/>
+        <result column="province" jdbcType="VARCHAR" property="province"/>
+        <result column="PL_city" jdbcType="VARCHAR" property="PL_city"/>
+        <result column="district" jdbcType="VARCHAR" property="district"/>
+        <result column="username" jdbcType="VARCHAR" property="userName"/>
+        <result column="town" jdbcType="VARCHAR" property="town"/>
+        <result column="community" jdbcType="VARCHAR" property="community"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <result column="supporter" jdbcType="VARCHAR" property="supporter"/>
+        <result column="disaster_info" jdbcType="VARCHAR" property="disasterInfo"/>
+        <result column="is_file" jdbcType="TINYINT" property="isFile"/>
+<!--        新增is_deleted属性，代表code状态是否被删除。-->
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
+<!--        新增是否审核属性，-->
+        <result column="code_status" jdbcType="TINYINT" property="codeStatus"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        code_id,province,PL_city,district,username,town,community,source,supporter,disaster_info,is_file,is_deleted,code_status
+    </sql>
+    <select id="findCodeList" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_code_show
+        where is_deleted=0
+        <if test="codeId!=null">
+            AND code_id = #{codeId}
+        </if>
+        order by code_id desc
+        <if test="start!=null and limit!=null">
+            limit #{start},#{limit}
+        </if>
+    </select>
+    <select id="getTotalCodes" parameterType="Map" resultType="int">
+        select count(*) from tb_code_show
+        where is_deleted=0
+        <if test="codeId!=null">
+            AND code_id = #{codeId}
+        </if>
+    </select>
+</mapper>

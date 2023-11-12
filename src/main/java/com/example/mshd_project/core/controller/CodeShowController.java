@@ -8,10 +8,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +16,12 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/admin")
+
 public class CodeShowController {
     @Resource
     private CodeShowService codeShowService;
 
+    @CrossOrigin
     @GetMapping("/codeshow/list")
     @ResponseBody
     public Result list(@RequestParam Map<String, Object> params){

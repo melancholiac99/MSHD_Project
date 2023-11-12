@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class CodeShow {
-    private String codeId;//主键
+    private Long codeId;//主键
     private String province;//省
     private String PL_city;//地级城市
     private String district;//区

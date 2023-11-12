@@ -48,7 +48,7 @@
         #{province,jdbcType=VARCHAR},
         #{PL_city,jdbcType=VARCHAR},
         #{district,jdbcType=VARCHAR},
-        #{username,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR},
         #{town,jdbcType=VARCHAR},
         #{community,jdbcType=VARCHAR},
         #{source,jdbcType=VARCHAR},

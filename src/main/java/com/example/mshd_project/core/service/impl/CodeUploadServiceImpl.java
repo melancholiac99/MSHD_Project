@@ -38,8 +38,9 @@ public class CodeUploadServiceImpl implements CodeUploadService {
         }
         //数据读取
         String json = FileUtils.readFileToString(file);
+        String JsonContextArr="["+json+"]";
         //String字符串转换为Json数组
-        JSONArray jsonArray = JSON.parseArray(json);
+        JSONArray jsonArray = JSON.parseArray(JsonContextArr);
         //遍历每一个json对象，将内容存放到CodeShow对象中
         for (Object obj : jsonArray) {
             JSONObject jobj = (JSONObject) obj;
@@ -50,13 +51,13 @@ public class CodeUploadServiceImpl implements CodeUploadService {
             String district = jobj.getString("district");
             String town = jobj.getString("town");
             String community = jobj.getString("community");
-            String userName = jobj.getString("username");
+            String userName = jobj.getString("userName");
             String source = jobj.getString("source");
             String supporter = jobj.getString("supporter");
-            String disasterInfo = jobj.getString("disaster_info");
-            Byte isFile = Byte.parseByte(jobj.getString("is_file"));
-            Byte isDeleted = Byte.parseByte(jobj.getString("is_deleted"));
-            Byte codeStatus = Byte.parseByte(jobj.getString("code_status"));
+            String disasterInfo = jobj.getString("disasterInfo");
+            Byte isFile = jobj.getByte("isFile");
+            Byte isDeleted = jobj.getByte("isDeleted");
+            Byte codeStatus = jobj.getByte("codeStatus");
             //给codeShow对象属性赋值
             CodeShow codeShow = new CodeShow();
             codeShow.setCodeId(codeId);

@@ -29,4 +29,4 @@ CREATE TABLE `tb_code_show` (
 
 /*Data for the table `tb_blog_comment` */
 
-insert  into `tb_code_show`(`code_id`,`province`,`PL_city`,`district`,`town`,`community`,`username`,`source`,`supporter`,`disaster_inftb_code_showo`,`is_deleted`,`is_file`,`code_status`) values (10011001,'北京市','市辖区','东城区','东华门街道','多福巷社区居委会','Zhou','业务报送数据 - 前方地震应急指挥部','文字','震情-震情信息-地理位置',0,0,1);
+insert  into `tb_code_show`(`code_id`,`province`,`PL_city`,`district`,`town`,`community`,`username`,`source`,`supporter`,`disaster_info`,`is_deleted`,`is_file`,`code_status`) values (10011001,'北京市','市辖区','东城区','东华门街道','多福巷社区居委会','Zhou','业务报送数据 - 前方地震应急指挥部','文字','震情-震情信息-地理位置',0,0,1);

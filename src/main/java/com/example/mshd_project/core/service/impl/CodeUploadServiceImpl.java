@@ -2,19 +2,24 @@ package com.example.mshd_project.core.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.example.mshd_project.core.dao.CodeShowMapper;
-import com.example.mshd_project.core.entity.CodeShow;
 import com.example.mshd_project.core.service.CodeUploadService;
-import com.example.mshd_project.core.utils.Result;
-import com.example.mshd_project.core.utils.ResultGenerator;
+import com.example.mshd_project.core.utils.*;
 import org.apache.commons.io.FileUtils;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.json.XML;
 
 import java.io.File;
 import java.io.IOException;
+
+import static com.example.mshd_project.core.config.Constants.FILE_DOWNLOAD_DIC;
 
 @Service
 public class CodeUploadServiceImpl implements CodeUploadService {
@@ -23,62 +28,81 @@ public class CodeUploadServiceImpl implements CodeUploadService {
 
     @Override
     public Result getJsonData(MultipartFile multipartFile) throws IOException {
-
-//   先将multipartFile类型转化为File，选择用缓冲区来实现这个转换即使用java 创建的临时文件 使用 MultipartFile.transferto()方法 。
-        File file = null;
-        try {
-            String originalFilename = multipartFile.getOriginalFilename();
-            String[] filename = originalFilename.split("\\.");
-            file = File.createTempFile(filename[0], filename[1] + ".");
-            multipartFile.transferTo(file);
-            file.deleteOnExit();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResultGenerator.genFailResult("IOException"+ e.getMessage());
-        }
+        //类型转换
+        File file = MultipartFileToFileUtil.multipartFileToFile(multipartFile);
         //数据读取
         String json = FileUtils.readFileToString(file);
-        String JsonContextArr="["+json+"]";
+        String jsonContextArr="["+json+"]";
         //String字符串转换为Json数组
-        JSONArray jsonArray = JSON.parseArray(JsonContextArr);
-        //遍历每一个json对象，将内容存放到CodeShow对象中
+        JSONArray jsonArray = JSON.parseArray(jsonContextArr);
+        //遍历每一个json对象，调用parseJson工具方法。
         for (Object obj : jsonArray) {
             JSONObject jobj = (JSONObject) obj;
-            //少用强制类型转换！
-            Long codeId = jobj.getLong("codeId");
-            String province = jobj.getString("province");
-            String PL_city = jobj.getString("PL_city");
-            String district = jobj.getString("district");
-            String town = jobj.getString("town");
-            String community = jobj.getString("community");
-            String userName = jobj.getString("userName");
-            String source = jobj.getString("source");
-            String supporter = jobj.getString("supporter");
-            String disasterInfo = jobj.getString("disasterInfo");
-            Byte isFile = jobj.getByte("isFile");
-            Byte isDeleted = jobj.getByte("isDeleted");
-            Byte codeStatus = jobj.getByte("codeStatus");
-            //给codeShow对象属性赋值
-            CodeShow codeShow = new CodeShow();
-            codeShow.setCodeId(codeId);
-            codeShow.setProvince(province);
-            codeShow.setPL_city(PL_city);
-            codeShow.setDistrict(district);
-            codeShow.setTown(town);
-            codeShow.setCommunity(community);
-            codeShow.setUserName(userName);
-            codeShow.setSupporter(supporter);
-            codeShow.setDisasterInfo(disasterInfo);
-            codeShow.setSource(source);
-            codeShow.setIsFile(isFile);
-            codeShow.setIsDeleted(isDeleted);
-            codeShow.setCodeStatus(codeStatus);
-
             //数据插入
-            if (mapper.insert(codeShow) != 1) {
+            if (mapper.insert(JsonUtil.parseJson(jobj)) != 1) {
                 return ResultGenerator.genFailResult("数据插入失败！");
             }
         }
+        return ResultGenerator.genSuccessResult("数据插入成功！");
+    }
+    @Override
+    public Result getXmlData(MultipartFile multipartFile) throws IOException {
+        try {
+            File xmlFile = MultipartFileToFileUtil.multipartFileToFile(multipartFile);
+            if (!xmlFile.exists()) {
+                return ResultGenerator.genFailResult("XML文件不存在！");
+            }
+
+            SAXReader saxReader = new SAXReader();
+            // 从文件流读入xml数据
+            Document document;
+            try {
+                document = saxReader.read(xmlFile);
+            } catch (DocumentException e) {
+                e.printStackTrace();
+                return ResultGenerator.genFailResult("读取XML文件失败：" + e.getMessage());
+            }
+            String xmlText = document.asXML().replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","");
+            org.json.JSONObject jsonObject = XML.toJSONObject(xmlText);
+            jsonObject = (org.json.JSONObject) jsonObject.get(jsonObject.keys().next());
+
+            String str = jsonObject.toString();
+//            String json;
+//            try {
+//                json = XmlUtil.xmlToJson(document.getRootElement());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return ResultGenerator.genFailResult("XML 转 JSON 失败：" + e.getMessage());
+//            }
+
+            String jsonContextArr="["+str+"]";
+            //String字符串转换为Json数组
+            JSONArray jsonArray = JSON.parseArray(jsonContextArr);
+
+            // 遍历每一个json对象，调用parseJson工具方法。
+            for (Object obj : jsonArray) {
+                JSONObject jobj = (JSONObject) obj;
+                // 数据插入
+                if (mapper.insert(JsonUtil.parseJson(jobj)) != 1) {
+                    return ResultGenerator.genFailResult("数据插入失败！");
+                }
+            }
+
+//            String savePath = "C:\\Users\\86130\\Desktop\\codexml.xml";
+//            Document xmlDocument;
+//            try {
+//                xmlDocument = XmlUtil.jsonToXml(jsonArray.getString(0));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return ResultGenerator.genFailResult("JSON 转 XML 失败：" + e.getMessage());
+//            }
+//
+//            XmlUtil.writeXml(xmlDocument, savePath, "gb2312");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultGenerator.genFailResult("数据插入失败：" + e.getMessage());
+        }
+
         return ResultGenerator.genSuccessResult("数据插入成功！");
     }
 }

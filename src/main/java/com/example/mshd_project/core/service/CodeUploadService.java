@@ -13,6 +13,10 @@ import java.io.IOException;
  */
 public interface CodeUploadService {
 
- /**传入multipartFile类型数据，解析其中属性插入数据库，返回result**/
-  Result getJsonData(MultipartFile file) throws IOException;
+ /**@param multipartFile
+  * @return Result类型数据
+  * 实现解析前端传来json文件，并将其中属性插入数据库表中
+  * **/
+  Result getJsonData(MultipartFile multipartFile) throws IOException;
+  Result getXmlData(MultipartFile multipartFile) throws IOException;
 }

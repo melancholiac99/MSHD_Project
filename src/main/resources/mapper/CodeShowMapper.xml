@@ -42,8 +42,9 @@
             AND code_id = #{codeId}
         </if>
     </select>
+<!--    插入code，如果codeId已存在，则忽略本次插入-->
     <insert id="insert" parameterType="com.example.mshd_project.core.entity.CodeShow">
-        INSERT INTO tb_code_show (<include refid="Base_Column_List"/>)
+        INSERT IGNORE INTO tb_code_show (<include refid="Base_Column_List"/>)
         values (#{codeId,jdbcType=BIGINT},
         #{province,jdbcType=VARCHAR},
         #{PL_city,jdbcType=VARCHAR},

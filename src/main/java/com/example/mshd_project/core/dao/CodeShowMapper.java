@@ -13,5 +13,7 @@ public interface CodeShowMapper {
        int getTotalCodes(Map map);
        /**将数据库中插入数据**/
        int insert(CodeShow codeShow);
+       /**删除数据**/
+       int deleteBatch(Integer[] ids);
 
 }

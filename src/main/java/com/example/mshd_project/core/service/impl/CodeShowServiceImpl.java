@@ -22,4 +22,9 @@ public class CodeShowServiceImpl implements CodeShowService {
         PageResult pageResult = new PageResult(codeShowList, total, pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }
+
+    @Override
+    public Boolean deleteBatch(Integer[] ids) {
+        return codeShowMapper.deleteBatch(ids) > 0;
+    }
 }

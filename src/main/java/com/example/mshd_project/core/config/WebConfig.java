@@ -5,14 +5,15 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**全局配置类--配置跨域请求
- * @author zyt**/
+ * @author zyt
+**/
 @Configuration
 public class WebConfig extends WebMvcConfigurationSupport {
     @Override
      public void addCorsMappings(CorsRegistry registry){
         //域访问路径
           registry.addMapping("/**")
-                  //请求来源
+                  //请求来源, 其实就是允许所有跨域请求
                   .allowedOriginPatterns("*")
                   //方法
                   .allowedMethods("GET","PUT","POST","OPTIONS","DELETE")

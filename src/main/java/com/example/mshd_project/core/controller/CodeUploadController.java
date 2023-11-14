@@ -38,7 +38,7 @@ public class CodeUploadController {
             Files.copy(multipartFile.getInputStream(), Paths.get(FILE_DOWNLOAD_DIC, fileName), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult("IOException 咱也不知道是啥，好像是文件保存失败");
+            return ResultGenerator.genFailResult("IOException, 好像是文件保存失败"+ e.getMessage());
         }
         return codeUploadService.getJsonData(multipartFile);
 }
@@ -57,7 +57,7 @@ public class CodeUploadController {
             Files.copy(multipartFile.getInputStream(), Paths.get(FILE_DOWNLOAD_DIC, fileName), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             e.printStackTrace();
-            return ResultGenerator.genFailResult("IOException 咱也不知道是啥，好像是文件保存失败");
+            return ResultGenerator.genFailResult("IOException, 好像是文件保存失败"+ e.getMessage());
         }
         return codeUploadService.getXmlData(multipartFile);
     }

@@ -52,7 +52,6 @@ public class CodeUploadServiceImpl implements CodeUploadService {
             if (!xmlFile.exists()) {
                 return ResultGenerator.genFailResult("XML文件不存在！");
             }
-
             SAXReader saxReader = new SAXReader();
             // 从文件流读入xml数据
             Document document;
@@ -65,39 +64,18 @@ public class CodeUploadServiceImpl implements CodeUploadService {
             String xmlText = document.asXML().replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","");
             org.json.JSONObject jsonObject = XML.toJSONObject(xmlText);
             jsonObject = (org.json.JSONObject) jsonObject.get(jsonObject.keys().next());
-
             String str = jsonObject.toString();
-//            String json;
-//            try {
-//                json = XmlUtil.xmlToJson(document.getRootElement());
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return ResultGenerator.genFailResult("XML 转 JSON 失败：" + e.getMessage());
-//            }
-
             String jsonContextArr="["+str+"]";
             //String字符串转换为Json数组
             JSONArray jsonArray = JSON.parseArray(jsonContextArr);
-
             // 遍历每一个json对象，调用parseJson工具方法。
             for (Object obj : jsonArray) {
                 JSONObject jobj = (JSONObject) obj;
                 // 数据插入
                 if (mapper.insert(JsonUtil.parseJson(jobj)) != 1) {
-                    return ResultGenerator.genFailResult("数据插入失败！");
+                    return ResultGenerator.genFailResult("数据插入失败！insert返回不为1！");
                 }
             }
-
-//            String savePath = "C:\\Users\\86130\\Desktop\\codexml.xml";
-//            Document xmlDocument;
-//            try {
-//                xmlDocument = XmlUtil.jsonToXml(jsonArray.getString(0));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                return ResultGenerator.genFailResult("JSON 转 XML 失败：" + e.getMessage());
-//            }
-//
-//            XmlUtil.writeXml(xmlDocument, savePath, "gb2312");
         } catch (Exception e) {
             e.printStackTrace();
             return ResultGenerator.genFailResult("数据插入失败：" + e.getMessage());

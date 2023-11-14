@@ -33,4 +33,19 @@ public class CodeShowController {
         PageQueryUtil pageQueryUtil = new PageQueryUtil(params);
         return ResultGenerator.genSuccessResult(codeShowService.getCodePage(pageQueryUtil));
     }
+
+    @CrossOrigin
+    @PostMapping("/codeshow/delete")
+    @ResponseBody
+    public Result delete(@RequestBody Integer[] ids) {
+        if (ids.length < 1) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        if (codeShowService.deleteBatch(ids)) {
+            return ResultGenerator.genSuccessResult();
+        } else {
+            return ResultGenerator.genFailResult("删除失败");
+        }
+    }
+
 }

@@ -6,7 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.mshd_project.core.entity.CodeShow;
 
 /**
- * Json工具类，只适用于存放codeShow类型数据的Json...
+ * Json工具类，适用于codeShow类型对象和JSONObject类型转换...
  * @author zyt
  * @date 2023/11/13
  */

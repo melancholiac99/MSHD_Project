@@ -59,4 +59,13 @@
         #{isDeleted,jdbcType=TINYINT},
         #{codeStatus,jdbcType=TINYINT})
     </insert>
+
+    <update id="deleteBatch" parameterType="java.util.List">
+        update tb_code_show
+        set is_deleted=1 where code_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
 </mapper>

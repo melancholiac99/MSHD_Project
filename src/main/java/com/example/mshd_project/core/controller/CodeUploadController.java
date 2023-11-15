@@ -43,7 +43,7 @@ public class CodeUploadController {
         return codeUploadService.getJsonData(multipartFile);
 }
 
-    @PostMapping("/uploadXmlFiles")
+    @PostMapping("/uploadxmlfile")
     @CrossOrigin
     public Object uploadXmlFiles(@RequestParam(value = "xmlFile") MultipartFile multipartFile) throws JSONException, IOException {
         //判断文件是否为空

@@ -1,10 +1,15 @@
 package com.example.mshd_project.core.service.impl;
 
 import com.example.mshd_project.core.dao.UserMapper;
+import com.example.mshd_project.core.entity.CodeShow;
 import com.example.mshd_project.core.entity.User;
 import com.example.mshd_project.core.service.UserService;
+import com.example.mshd_project.core.utils.PageQueryUtil;
+import com.example.mshd_project.core.utils.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author zyt
@@ -27,5 +32,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public int updatePwd(String username, String newpassword) {
         return userMapper.updateUser(username,newpassword);
+    }
+
+    @Override
+    public PageResult getUserPage(PageQueryUtil pageUtil) {
+
+        List<User> userList = userMapper.findUserList(pageUtil);
+        int total = userMapper.getTotalUsers(pageUtil);
+        PageResult pageResult = new PageResult(userList, total, pageUtil.getLimit(), pageUtil.getPage());
+        return pageResult;
     }
 }

@@ -1,10 +1,12 @@
 package com.example.mshd_project.core.dao;
 
+import com.example.mshd_project.core.entity.CodeShow;
 import com.example.mshd_project.core.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.example.mshd_project.core.utils.PageQueryUtil;
+import org.apache.ibatis.annotations.*;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 这个mapper文件使用了ibatis的注解开发来写sql，
@@ -23,5 +25,19 @@ public interface UserMapper {
 
     @Update("update  tb_user set password = #{newpassword}  where user_name = #{username}")
     public int updateUser(String username, String newpassword);
+    @Select("select count(*) from tb_user" )
+    public int getTotalUsers(Map map);
+    @SelectProvider(type = UserSqlProvider.class, method = "findUserListSql")
+    List<User> findUserList(Map map);
 
+    class UserSqlProvider {
+        public String findUserListSql(Map<String, Object> params) {
+            StringBuilder sql = new StringBuilder("SELECT user_id AS userId, user_name AS userName, password, status, regist_time AS registTime FROM tb_user ");
+            sql.append("ORDER BY user_id DESC ");
+            if (params.get("start") != null && params.get("limit") != null) {
+                sql.append("LIMIT #{start}, #{limit}");
+            }
+            return sql.toString();
+        }
+    }
 }

@@ -3,17 +3,17 @@ package com.example.mshd_project.core.controller;
 
 import com.example.mshd_project.core.entity.User;
 import com.example.mshd_project.core.service.UserService;
-import com.example.mshd_project.core.utils.MD5Util;
-import com.example.mshd_project.core.utils.Result;
-import com.example.mshd_project.core.utils.ResultGenerator;
+import com.example.mshd_project.core.utils.*;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 
 @RestController
@@ -87,6 +87,25 @@ public class UserController {
                 return ResultGenerator.genSuccessResult("密码修改成功");
             }
             return ResultGenerator.genFailResult("密码修改错误");
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping("/list")
+    @ResponseBody
+    public Result list(@RequestParam Map<String, Object> params){
+        //检查请求参数是否合理，如果不合理返回result的message是"参数异常"
+        if (ObjectUtils.isEmpty(params.get("page")) || ObjectUtils.isEmpty(params.get("limit"))) {
+            return ResultGenerator.genFailResult("参数异常！");
+        }
+        //请求合理，则解析请求，将其转化为PageQueryUtil类的对象
+        PageQueryUtil pageQueryUtil = new PageQueryUtil(params);
+        PageResult codeShowPageResult = userService.getUserPage(pageQueryUtil);
+        if(codeShowPageResult.getList() != null && codeShowPageResult.getList().size()!=0){
+            return ResultGenerator.genSuccessResult(codeShowPageResult);
+        }
+        else {
+            return ResultGenerator.genFailResult("未找到数据，或者是返回数据列表没有初始化！");
         }
     }
 }

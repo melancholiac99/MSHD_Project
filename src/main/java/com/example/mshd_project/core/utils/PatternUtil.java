@@ -29,6 +29,12 @@ public class PatternUtil {
         return match.matches();
     }
 
+    public static Boolean validNumKeyword(String keyword) {
+        String regex = "^[0-9]+$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher match = pattern.matcher(keyword);
+        return match.matches();
+    }
 
     /**
      * 判断是否是邮箱

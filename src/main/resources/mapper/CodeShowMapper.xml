@@ -27,8 +27,14 @@
         <include refid="Base_Column_List"/>
         from tb_code_show
         where is_deleted=0
+        <if test="keyword!=null">
+            AND (code_id like CONCAT('%',#{keyword},'%' ) )
+        </if>
         <if test="codeId!=null">
             AND code_id = #{codeId}
+        </if>
+        <if test="codeStatus!=null">
+            AND code_status = #{codeStatus}
         </if>
         order by code_id desc
         <if test="start!=null and limit!=null">

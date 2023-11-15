@@ -1,13 +1,13 @@
 package com.example.mshd_project.core.controller;
 
+import com.example.mshd_project.core.entity.CodeShow;
 import com.example.mshd_project.core.service.CodeShowService;
-import com.example.mshd_project.core.utils.PageQueryUtil;
-import com.example.mshd_project.core.utils.Result;
-import com.example.mshd_project.core.utils.ResultGenerator;
+import com.example.mshd_project.core.utils.*;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -46,6 +46,74 @@ public class CodeShowController {
         } else {
             return ResultGenerator.genFailResult("删除失败");
         }
+    }
+    @CrossOrigin
+    @PostMapping("/codeshow/save")
+    @ResponseBody
+    public Result save(@RequestParam("codeId") Long codeId,
+                       @RequestParam("province") String province,
+                       @RequestParam(name = "PL_city", required = false) String PL_city,
+                       @RequestParam("district") String district,
+                       @RequestParam("town") String town,
+                       @RequestParam("community") String community,
+                       @RequestParam("userName") String userName,
+                       @RequestParam("source") String source,
+                       @RequestParam("supporter") String supporter,
+                       @RequestParam("disasterInfo") String disasterInfo,
+                       @RequestParam("isFile") Byte isFile,
+                       @RequestParam("isDeleted") Byte isDeleted,
+                       @RequestParam("codeStatus") Byte codeStatus) {
+        if (codeId == null) {
+            return ResultGenerator.genFailResult("请输入灾情编码");
+        }
+        if (!StringUtils.hasText(district)) {
+            return ResultGenerator.genFailResult("请输入区县信息");
+        }
+        if (town.trim().length() > 150) {
+            return ResultGenerator.genFailResult("乡镇信息过长");
+        }
+        if (community.trim().length() > 150) {
+            return ResultGenerator.genFailResult("社区信息过长");
+        }
+        if (!StringUtils.hasText(userName)) {
+            return ResultGenerator.genFailResult("请输入用户名");
+        }
+        CodeShow codeShow = new CodeShow();
+        codeShow.setCodeId(codeId);
+        codeShow.setProvince(province);
+        codeShow.setPL_city(PL_city);
+        codeShow.setDistrict(district);
+        codeShow.setTown(town);
+        codeShow.setCommunity(community);
+        codeShow.setUserName(userName);
+        codeShow.setSource(source);
+        codeShow.setSupporter(supporter);
+        codeShow.setDisasterInfo(disasterInfo);
+        codeShow.setIsFile(isFile);
+        codeShow.setIsDeleted(isDeleted);
+        codeShow.setCodeStatus(codeStatus);
+        String saveBlogResult = codeShowService.saveCode(codeShow);
+        if ("success".equals(saveBlogResult)) {
+            return ResultGenerator.genSuccessResult("添加成功");
+        } else {
+            return ResultGenerator.genFailResult(saveBlogResult);
+        }
+    }
+
+    /**
+     * 搜索列表页
+     *
+     * @return
+     */
+    @CrossOrigin
+    @GetMapping({"/codeshow/search/{keyword}/{page}"})
+    @ResponseBody
+    public Result search(HttpServletRequest request, @PathVariable("keyword") String keyword, @PathVariable("page") Integer page) {
+        if(!PatternUtil.validNumKeyword(keyword)){
+            return ResultGenerator.genFailResult("只能输入数字0~9");
+        }
+        PageResult codeShowPageResult = codeShowService.getCodesPageBySearch(keyword, page);
+        return ResultGenerator.genSuccessResult(codeShowPageResult);
     }
 
 }

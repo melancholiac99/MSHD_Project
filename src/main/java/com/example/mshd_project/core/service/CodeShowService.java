@@ -1,5 +1,6 @@
 package com.example.mshd_project.core.service;
 
+import com.example.mshd_project.core.entity.CodeShow;
 import com.example.mshd_project.core.utils.PageQueryUtil;
 import com.example.mshd_project.core.utils.PageResult;
 
@@ -19,4 +20,7 @@ public interface CodeShowService {
      * */
     Boolean deleteBatch(Integer[] ids);
 
+    String saveCode(CodeShow codeShow);
+
+    PageResult getCodesPageBySearch(String keyword, Integer page);
 }

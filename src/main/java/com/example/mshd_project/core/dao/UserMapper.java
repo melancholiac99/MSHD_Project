@@ -17,7 +17,7 @@ public interface UserMapper {
     public User getUserByName(String userName);
 
 
-    @Insert("insert into tb_user (user_name,password,status,regist_time)  values (#{userName}, #{passwd}, #{status}, #{registTime})")
+    @Insert("insert into tb_user (user_name,password,status,regist_time)  values (#{userName}, #{password}, #{status}, #{registTime})")
     public int addUser(User user);
 
 

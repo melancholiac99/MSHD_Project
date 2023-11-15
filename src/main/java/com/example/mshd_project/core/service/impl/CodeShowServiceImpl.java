@@ -61,7 +61,6 @@ public class CodeShowServiceImpl implements CodeShowService {
 
     @Override
     public PageResult getCodesPageBySearch(String keyword, Integer page) {
-        if (page > 0) {
             Map param = new HashMap();
             param.put("page", page);
             param.put("limit", 9);
@@ -73,8 +72,6 @@ public class CodeShowServiceImpl implements CodeShowService {
             int total = codeShowMapper.getTotalCodes(pageUtil);
             PageResult pageResult = new PageResult(codeShowList, total, pageUtil.getLimit(), pageUtil.getPage());
             return pageResult;
-        }
-        return null;
     }
 
 

@@ -31,8 +31,15 @@ public class CodeShowController {
         }
         //请求合理，则解析请求，将其转化为PageQueryUtil类的对象
         PageQueryUtil pageQueryUtil = new PageQueryUtil(params);
-        return ResultGenerator.genSuccessResult(codeShowService.getCodePage(pageQueryUtil));
+        PageResult codeShowPageResult = codeShowService.getCodePage(pageQueryUtil);
+        if(codeShowPageResult.getList() != null && codeShowPageResult.getList().size()!=0){
+            return ResultGenerator.genSuccessResult(codeShowPageResult);
+        }
+        else {
+            return ResultGenerator.genFailResult("未找到数据，或者是返回数据列表没有初始化！");
+        }
     }
+
 
     @CrossOrigin
     @PostMapping("/codeshow/delete")
@@ -48,7 +55,7 @@ public class CodeShowController {
         }
     }
     @CrossOrigin
-    @PostMapping("/codeshow/save")
+    @PostMapping("/codeshow/add")
     @ResponseBody
     public Result save(@RequestParam("codeId") Long codeId,
                        @RequestParam("province") String province,
@@ -59,7 +66,7 @@ public class CodeShowController {
                        @RequestParam("userName") String userName,
                        @RequestParam("source") String source,
                        @RequestParam("supporter") String supporter,
-                       @RequestParam("disasterInfo") String disasterInfo,
+                           @RequestParam("disasterInfo") String disasterInfo,
                        @RequestParam("isFile") Byte isFile,
                        @RequestParam("isDeleted") Byte isDeleted,
                        @RequestParam("codeStatus") Byte codeStatus) {
@@ -108,12 +115,23 @@ public class CodeShowController {
     @CrossOrigin
     @GetMapping({"/codeshow/search/{keyword}/{page}"})
     @ResponseBody
-    public Result search(HttpServletRequest request, @PathVariable("keyword") String keyword, @PathVariable("page") Integer page) {
+    public Result search(@PathVariable("keyword") String keyword, @PathVariable("page") Integer page) {
         if(!PatternUtil.validNumKeyword(keyword)){
             return ResultGenerator.genFailResult("只能输入数字0~9");
         }
-        PageResult codeShowPageResult = codeShowService.getCodesPageBySearch(keyword, page);
-        return ResultGenerator.genSuccessResult(codeShowPageResult);
+        if (page >0){
+            PageResult codeShowPageResult = codeShowService.getCodesPageBySearch(keyword, page);
+            //判断数据库返回数据列表是否为空
+            if(codeShowPageResult.getList() != null && codeShowPageResult.getList().size()!=0){
+                return ResultGenerator.genSuccessResult(codeShowPageResult);
+            }
+            else {
+                return ResultGenerator.genFailResult("未找到符合要求的编码，或者是返回数据列表没有初始化！");
+            }
+        }
+        else {
+            return ResultGenerator.genFailResult("页码必须为正整数！");
+        }
     }
 
 }

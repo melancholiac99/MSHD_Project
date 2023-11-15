@@ -75,6 +75,9 @@ public class UserController {
     @CrossOrigin
     public Result   changepwd(@RequestParam String userName,@RequestParam String oldpassword,@RequestParam String newpassword, HttpSession session) {
         User exsitUser = userService.selectByName(userName);
+        if (exsitUser == null) {
+            return ResultGenerator.genFailResult("用户未注册");
+        }
         if (!MD5Util.MD5Encode(oldpassword,"UTF-8").equals(exsitUser.getPassword())) {
             System.out.println(oldpassword);
             return ResultGenerator.genFailResult("原密码输入错误");

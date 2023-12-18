@@ -39,9 +39,6 @@ public class CodeShowListener extends AnalysisEventListener<CodeShow>  {
         if (cachedDataList.size() >= BATCH_COUNT) {
             log.info("{}条数据，开始存储数据库！", cachedDataList.size());
            Result uploadExcelResult = codeUploadService.getExcelData(cachedDataList);
-//           if(uploadExcelResult.getResultCode() == 500){
-//               uploadCallBack.onUploadResult(uploadExcelResult);
-//           }
             // 存储完成清理 list
             cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
         }

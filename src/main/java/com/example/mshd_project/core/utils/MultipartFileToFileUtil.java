@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * @author zyt  11.12
+ * @author zyt
  */
 
 public class MultipartFileToFileUtil {

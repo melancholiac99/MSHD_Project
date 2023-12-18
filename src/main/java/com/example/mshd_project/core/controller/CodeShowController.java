@@ -1,19 +1,20 @@
 package com.example.mshd_project.core.controller;
 
-import com.example.mshd_project.core.entity.CodeShow;
+import com.example.mshd_project.core.domain.CodeShow;
 import com.example.mshd_project.core.service.CodeShowService;
 import com.example.mshd_project.core.utils.*;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ * @author zyt
+ */
 @Controller
 @RequestMapping("/admin")
 
@@ -44,7 +45,7 @@ public class CodeShowController {
     @CrossOrigin
     @PostMapping("/codeshow/delete")
     @ResponseBody
-    public Result delete(@RequestBody Integer[] ids) {
+    public Result delete(@RequestBody String[] ids) {
         if (ids.length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
         }
@@ -54,10 +55,11 @@ public class CodeShowController {
             return ResultGenerator.genFailResult("删除失败");
         }
     }
+
     @CrossOrigin
     @PostMapping("/codeshow/add")
     @ResponseBody
-    public Result save(@RequestParam("codeId") Long codeId,
+    public Result save(@RequestParam("codeId") String codeId,
                        @RequestParam("province") String province,
                        @RequestParam(name = "PL_city", required = false) String PL_city,
                        @RequestParam("district") String district,
@@ -66,11 +68,11 @@ public class CodeShowController {
                        @RequestParam("userName") String userName,
                        @RequestParam("source") String source,
                        @RequestParam("supporter") String supporter,
-                           @RequestParam("disasterInfo") String disasterInfo,
+                       @RequestParam("disasterInfo") String disasterInfo,
                        @RequestParam("isFile") Byte isFile,
                        @RequestParam("isDeleted") Byte isDeleted,
                        @RequestParam("codeStatus") Byte codeStatus) {
-        if (codeId == null) {
+        if (!StringUtils.hasText(codeId)) {
             return ResultGenerator.genFailResult("请输入灾情编码");
         }
         if (!StringUtils.hasText(district)) {

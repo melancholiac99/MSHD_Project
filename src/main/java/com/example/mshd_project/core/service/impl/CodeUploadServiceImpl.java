@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.example.mshd_project.core.dao.CodeShowMapper;
+import com.example.mshd_project.core.domain.CodeShow;
 import com.example.mshd_project.core.service.CodeUploadService;
 import com.example.mshd_project.core.utils.*;
 import org.apache.commons.io.FileUtils;
@@ -18,6 +19,7 @@ import org.json.XML;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import static com.example.mshd_project.core.config.Constants.FILE_DOWNLOAD_DIC;
 
@@ -32,7 +34,8 @@ public class CodeUploadServiceImpl implements CodeUploadService {
         File file = MultipartFileToFileUtil.multipartFileToFile(multipartFile);
         //数据读取
         String json = FileUtils.readFileToString(file);
-        String jsonContextArr="["+json+"]";
+        //在字符串首尾加[ ] 才能被正确转换成json
+        String jsonContextArr = "[" + json + "]";
         //String字符串转换为Json数组
         JSONArray jsonArray = JSON.parseArray(jsonContextArr);
         //遍历每一个json对象，调用parseJson工具方法。
@@ -45,6 +48,7 @@ public class CodeUploadServiceImpl implements CodeUploadService {
         }
         return ResultGenerator.genSuccessResult("数据插入成功！");
     }
+
     @Override
     public Result getXmlData(MultipartFile multipartFile) throws IOException {
         try {
@@ -61,11 +65,11 @@ public class CodeUploadServiceImpl implements CodeUploadService {
                 e.printStackTrace();
                 return ResultGenerator.genFailResult("读取XML文件失败：" + e.getMessage());
             }
-            String xmlText = document.asXML().replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>","");
+            String xmlText = document.asXML().replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
             org.json.JSONObject jsonObject = XML.toJSONObject(xmlText);
             jsonObject = (org.json.JSONObject) jsonObject.get(jsonObject.keys().next());
             String str = jsonObject.toString();
-            String jsonContextArr="["+str+"]";
+            String jsonContextArr = "[" + str + "]";
             //String字符串转换为Json数组
             JSONArray jsonArray = JSON.parseArray(jsonContextArr);
             // 遍历每一个json对象，调用parseJson工具方法。
@@ -81,6 +85,21 @@ public class CodeUploadServiceImpl implements CodeUploadService {
             return ResultGenerator.genFailResult("数据插入失败：" + e.getMessage());
         }
 
+        return ResultGenerator.genSuccessResult("数据插入成功！");
+    }
+
+    @Override
+    public Result getExcelData(List<CodeShow> cacheList) {
+        for (CodeShow code : cacheList) {
+            try {
+                if (mapper.insert(code) != 1) {
+                    return ResultGenerator.genFailResult("数据插入失败！insert返回不为1！");
+                }
+            } catch(Exception e){
+                e.printStackTrace();
+                return ResultGenerator.genFailResult("数据插入异常！" + e.getMessage());
+            }
+        }
         return ResultGenerator.genSuccessResult("数据插入成功！");
     }
 }

@@ -1,4 +1,4 @@
-package com.example.mshd_project.core.entity;
+package com.example.mshd_project.core.domain;
 
 public class User {
     private Integer userId;

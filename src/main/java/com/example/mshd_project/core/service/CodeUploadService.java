@@ -1,11 +1,13 @@
 package com.example.mshd_project.core.service;
 
+import com.example.mshd_project.core.domain.CodeShow;
 import com.example.mshd_project.core.utils.Result;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -19,4 +21,6 @@ public interface CodeUploadService {
   * **/
   Result getJsonData(MultipartFile multipartFile) throws IOException;
   Result getXmlData(MultipartFile multipartFile) throws IOException;
+
+ Result getExcelData(List<CodeShow> cacheList);
 }

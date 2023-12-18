@@ -1,8 +1,7 @@
 package com.example.mshd_project.core.service.impl;
 
 import com.example.mshd_project.core.dao.UserMapper;
-import com.example.mshd_project.core.entity.CodeShow;
-import com.example.mshd_project.core.entity.User;
+import com.example.mshd_project.core.domain.User;
 import com.example.mshd_project.core.service.UserService;
 import com.example.mshd_project.core.utils.PageQueryUtil;
 import com.example.mshd_project.core.utils.PageResult;

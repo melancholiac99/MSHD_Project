@@ -1,25 +1,27 @@
 package com.example.mshd_project.core.service.impl;
 
 import com.example.mshd_project.core.dao.CodeShowMapper;
-import com.example.mshd_project.core.entity.CodeShow;
+import com.example.mshd_project.core.domain.CodeShow;
 import com.example.mshd_project.core.service.CodeShowService;
 import com.example.mshd_project.core.utils.PageQueryUtil;
 import com.example.mshd_project.core.utils.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author zyt
+ */
 @Service
 public class CodeShowServiceImpl implements CodeShowService {
     @Autowired
     private CodeShowMapper codeShowMapper;
 
-    @Override//实现接口方法，不要忘记加Override注解！
+    @Override
+    //实现接口方法，不要忘记加Override注解！
     public PageResult getCodePage(PageQueryUtil pageUtil){
         List<CodeShow> codeShowList = codeShowMapper.findCodeList(pageUtil);
         int total = codeShowMapper.getTotalCodes(pageUtil);
@@ -28,7 +30,7 @@ public class CodeShowServiceImpl implements CodeShowService {
     }
 
     @Override
-    public Boolean deleteBatch(Integer[] ids) {
+    public Boolean deleteBatch(String[] ids) {
         return codeShowMapper.deleteBatch(ids) > 0;
     }
 

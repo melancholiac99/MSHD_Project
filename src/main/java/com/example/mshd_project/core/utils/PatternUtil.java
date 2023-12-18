@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 /**
  * 正则工具类
  *
-
  */
 public class PatternUtil {
 

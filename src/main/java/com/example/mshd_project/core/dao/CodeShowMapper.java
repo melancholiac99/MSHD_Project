@@ -1,6 +1,6 @@
 package com.example.mshd_project.core.dao;
 
-import com.example.mshd_project.core.entity.CodeShow;
+import com.example.mshd_project.core.domain.CodeShow;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,6 +14,6 @@ public interface CodeShowMapper {
        /**将数据库中插入数据**/
        int insert(CodeShow codeShow);
        /**删除数据**/
-       int deleteBatch(Integer[] ids);
+       int deleteBatch(String[] ids);
 
 }

@@ -1,6 +1,6 @@
 package com.example.mshd_project.core.service;
 
-import com.example.mshd_project.core.entity.CodeShow;
+import com.example.mshd_project.core.domain.CodeShow;
 import com.example.mshd_project.core.utils.PageQueryUtil;
 import com.example.mshd_project.core.utils.PageResult;
 
@@ -18,7 +18,7 @@ public interface CodeShowService {
      * @return Boolean
      * 通过给定codeId数组删除数据
      * */
-    Boolean deleteBatch(Integer[] ids);
+    Boolean deleteBatch(String[] ids);
 
     String saveCode(CodeShow codeShow);
 

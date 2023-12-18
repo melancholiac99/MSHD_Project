@@ -1,9 +1,7 @@
 package com.example.mshd_project.core.utils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.example.mshd_project.core.entity.CodeShow;
+import com.example.mshd_project.core.domain.CodeShow;
 
 /**
  * Json工具类，适用于codeShow类型对象和JSONObject类型转换...
@@ -13,7 +11,7 @@ import com.example.mshd_project.core.entity.CodeShow;
 
 public class JsonUtil {
     public static CodeShow parseJson(JSONObject jobj){
-        Long codeId = jobj.getLong("codeId");
+        String codeId = jobj.getString("codeId");
         String province = jobj.getString("province");
         String PL_city = jobj.getString("PL_city");
         String district = jobj.getString("district");

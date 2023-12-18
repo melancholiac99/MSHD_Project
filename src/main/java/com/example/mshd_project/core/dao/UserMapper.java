@@ -1,8 +1,6 @@
 package com.example.mshd_project.core.dao;
 
-import com.example.mshd_project.core.entity.CodeShow;
-import com.example.mshd_project.core.entity.User;
-import com.example.mshd_project.core.utils.PageQueryUtil;
+import com.example.mshd_project.core.domain.User;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;

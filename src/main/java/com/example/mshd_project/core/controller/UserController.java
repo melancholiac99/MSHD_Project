@@ -1,7 +1,7 @@
 package com.example.mshd_project.core.controller;
 
 
-import com.example.mshd_project.core.entity.User;
+import com.example.mshd_project.core.domain.User;
 import com.example.mshd_project.core.service.UserService;
 import com.example.mshd_project.core.utils.*;
 import jakarta.annotation.Resource;

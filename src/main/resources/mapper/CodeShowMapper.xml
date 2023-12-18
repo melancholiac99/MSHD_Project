@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mshd_project.core.dao.CodeShowMapper">
-    <resultMap id="BaseResultMap" type="com.example.mshd_project.core.entity.CodeShow">
-        <id column="code_id" jdbcType="BIGINT" property="codeId"/>
+    <resultMap id="BaseResultMap" type="com.example.mshd_project.core.domain.CodeShow">
+<!--        <id column="id" jdbcType="INT" property="id"/>-->
+        <result column="code_id" jdbcType="VARCHAR" property="codeId"/>
         <result column="province" jdbcType="VARCHAR" property="province"/>
         <result column="PL_city" jdbcType="VARCHAR" property="PL_city"/>
         <result column="district" jdbcType="VARCHAR" property="district"/>
@@ -20,7 +21,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        code_id,province,PL_city,district,username,town,community,source,supporter,disaster_info,is_file,is_deleted,code_status
+         code_id,province,PL_city,district,username,town,community,source,supporter,disaster_info,is_file,is_deleted,code_status
     </sql>
     <select id="findCodeList" parameterType="Map" resultMap="BaseResultMap">
         select
@@ -36,7 +37,7 @@
         <if test="codeStatus!=null">
             AND code_status = #{codeStatus}
         </if>
-        order by code_id desc
+        order by id desc
         <if test="start!=null and limit!=null">
             limit #{start},#{limit}
         </if>
@@ -48,28 +49,51 @@
             AND code_id = #{codeId}
         </if>
     </select>
-<!--    插入code，如果codeId已存在，则忽略本次插入-->
-    <insert id="insert" parameterType="com.example.mshd_project.core.entity.CodeShow">
-        INSERT IGNORE INTO tb_code_show (<include refid="Base_Column_List"/>)
-        values (#{codeId,jdbcType=BIGINT},
+<!--    插入code，如果id已存在，则忽略本次插入-->
+    <insert id="insert" parameterType="com.example.mshd_project.core.domain.CodeShow">
+        INSERT  INTO tb_code_show (<include refid="Base_Column_List"/>)
+        values (#{codeId,jdbcType=VARCHAR},
         #{province,jdbcType=VARCHAR},
-        #{PL_city,jdbcType=VARCHAR},
+        <choose>
+            <when test="PL_city != null">
+                #{PL_city,jdbcType=VARCHAR}
+            </when>
+            <otherwise>
+                "暂无"
+            </otherwise>
+        </choose>,
         #{district,jdbcType=VARCHAR},
         #{userName,jdbcType=VARCHAR},
         #{town,jdbcType=VARCHAR},
-        #{community,jdbcType=VARCHAR},
+        <choose>
+            <when test="community != null">
+                #{community,jdbcType=VARCHAR}
+            </when>
+            <otherwise>
+                "暂无"
+            </otherwise>
+        </choose>,
         #{source,jdbcType=VARCHAR},
         #{supporter,jdbcType=VARCHAR},
         #{disasterInfo,jdbcType=VARCHAR},
         #{isFile,jdbcType=TINYINT},
         #{isDeleted,jdbcType=TINYINT},
-        #{codeStatus,jdbcType=TINYINT})
+        <choose>
+            <when test="codeStatus != null">
+                #{codeStatus,jdbcType=TINYINT}
+            </when>
+            <otherwise>
+                1
+            </otherwise>
+        </choose>
+        )
     </insert>
+
 
     <update id="deleteBatch" parameterType="java.util.List">
         update tb_code_show
-        set is_deleted=1 where code_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
+        set is_deleted = 1 where code_id in
+        <foreach item ="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
